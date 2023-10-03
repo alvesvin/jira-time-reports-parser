@@ -8,10 +8,10 @@ const sheet0 = workbook.Sheets[workbook.SheetNames[0]];
 const jdata = XLSX.utils.sheet_to_json(sheet0);
 
 const parsedObj = jdata
-  .filter((data: any) => data["Clave"])
+  .filter((data: any) => data["Clave"] || data["Key"])
   .reduce((acm: any, crr: any) => {
-    const key = crr["Clave"];
-    const hour = +(+crr["Tempo Gasto (h)"].replace(",", ".")).toFixed(2);
+    const key = crr["Clave"] || crr["Key"];
+    const hour = +(+(crr["Tempo Gasto (h)"] || crr["Time Spent (h)"]).replace(",", ".")).toFixed(2);
     return {
       ...acm,
       ...(key ? { [key]: (acm[key] || 0) + hour } : {}),
